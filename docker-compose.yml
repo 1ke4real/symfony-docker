@@ -1,0 +1,27 @@
+services:
+  nginx:
+    container_name: nginx
+    build:
+        dockerfile: ./docker/nginx/Dockerfile
+    volumes:
+      - ./:/var/www:rw
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    depends_on:
+      - php
+    networks:
+        - app-network
+  php:
+    container_name: php
+    build:
+      dockerfile: ./docker/php/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www:rw
+    working_dir: /var/www
+    networks:
+        - app-network
+networks:
+    app-network:
+        driver: bridge
